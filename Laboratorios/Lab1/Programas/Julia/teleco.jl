@@ -1,38 +1,66 @@
+# Modulo para el laboratorio1:Teoria de las telecomunicaciones
 module Teleco
-
-type DiscretSource
-    source :: UTF8String
-    entropy :: Float64
-    code :: Dict
-    probs :: Vector
-end
-
     
+
+function probs(iter)
+    # Funcion para calcular las probabilidades de ocurrencia de cada simbolo
+    # en una fuente de informacion discreta sin memoria.
+    # Input:
+    # -----
+    # iter: Cualquier fuente iterable(texto,vectores...etc) 
+    # Output:
+    # ------
+    # d: Diccionario con los elementos de la fuente y sus frecuencias
+    # p: Vector de probabilidades
+
+    d = Dict{eltype(iter), Int}()
+    l = length(iter)
     
-# Funcion para calcular las probabilidades de ocurrencia de cada simbolo existente en 
-# una fuente de informacion
+    for e in iter
+        d[e] = get(d, e, 0) + 1 
+    end
+    p = collect((values(d))) / l 
+    return d,p
+end
 
-function probs_letters(ds::DiscretSource)
-    # Compute the probabilities of letters
-    d = Dict{Char, Float64}()
-    prob = [length(find(ds.source.data .== letter)) for letter in Set(ds.source.data)] / (length(ds.source.data))
-    d = {letter => i for i in prob, letter in Set(ds.source.data)}
-     
-    return d,prob
+function freqs_pr(iter)
+    # Funcion para calcular 
+    pr = Collections.PriorityQueue()
+    
+    for e in iter
+        pr["$e"] = get(pr, "$e", 0) + 1 
+    end
+    
+    return pr
+end
+
+
+function entropy(p)
+   # Funcion para calcular la entropia de una 
+   # fuente discreta sin memoria
+   # Input:
+   # -----
+   # p: Vector de probabilidades de la fuente
+   # Output:
+   # ------
+   # h: Entropia de la fuente
+    i = log2(1./p)
+    aux = p.*i
+    h = sum(aux)
+    
+    return h
 
 end
 
-function information(ds::DiscretSource)
-
-    i = log2(1 ./ ds.probs)
-    return i
-end
-
-#function entropia(d)
-export probs_letters, information, DiscretSource
+function show_source(d)
+    # Funcion para mostrar los elementos de una fuente 
+    # y su frecuencia de aparicion
+    for (v,k) in zip(values(d),keys(d))
+        println("elemento: $k --> frecuencia: $v")
+    end
 end    
 
-#export probabilidad_txt, informacion
-#end
+export probs, probs_pr,entropy, show_source
 
 
+end

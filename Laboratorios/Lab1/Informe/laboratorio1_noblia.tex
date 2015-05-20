@@ -1,0 +1,446 @@
+\documentclass[10pt]{article}
+%-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*Packages--*--*--*--*--*--*--*--*--*--*--*--*--*
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{lipsum}
+\usepackage{hyperref} 
+\usepackage{listings}
+\usepackage{fancyhdr}
+ \usepackage[utf8]{inputenc}
+\usepackage{hyperref} 
+\usepackage[spanish]{babel}
+%\usepackage{simpsons}
+%\usepackage[dvips]{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+%\usepackage[ansinew]{inputenc}
+\usepackage{color}
+%\usepackage{pstricks, pst-node, pst-plot, pst-circ}
+%\usepackage{moredefs}
+%\usepackage{pstricks}
+%\usepackage{pst-circ}
+%\usepackege{pst-node}
+%\usepackage{pst-plot}
+\usepackage{moredefs}
+%\usepackage{mcode}
+%\usepackage[above]{placeins}
+\usepackage{fancybox}
+\usepackage{subfig}
+\usepackage{float}
+%\usepackage{mcode} para colorear codigo de matlab
+\usepackage{xcolor}
+\usepackage{wallpaper}
+\usepackage{textcomp}
+%-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+
+%*****************************definiciones*******************************
+\oddsidemargin -0.2in \textwidth 7.0in \topmargin -0.9in \textheight
+9.0in
+\parindent 3em
+\hyphenation{e-jem-plo
+e-rro-res de-pen-dien-te co-rrien-te res-pues-ta fi-gu-ran
+cons-tan-tes o-pe-ra-cion i-lu-mi-na-cion}
+
+\pagestyle{fancy}
+\headheight 50pt 
+\renewcommand{\arrayrulewidth}{3pt} 
+\newtheorem{defi}{{\it Definición}}[section]
+%@@@@@@@@@@@@@@@@@@@@@@@@@@@cabecera y pie de pagina @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+\rhead{\includegraphics[width=.075\textwidth]{logo_iaci2.eps}}
+\chead{}
+\lhead{Teoría de las Telecomunicaciones}
+\rfoot{1º cuatrimestre 2015  }
+\cfoot{\thepage}
+\lfoot{\bf{Universidad Nacional de Quilmes}}
+%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+%::::::::::::::::::::::Colores varios:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+\definecolor{azul-claro}{rgb}{0.335,0.89,1}
+\definecolor{gainsboro}{rgb}{0.86,0.86,0.86}
+\definecolor{mediumseagreen}{rgb}{0.24,0.7,0.44}
+\definecolor{moccasin}{rgb}{1,0.89,0.71}
+\definecolor{cornflowerblue}{rgb}{0.39,0.58,0.93}
+\definecolor{lightgray}{rgb}{0.83,0.83,0.83}
+\definecolor{darkgrey}{rgb}{0.66,0.66,0.66}
+\definecolor{darkslategray}{rgb}{0.18,0.31,0.31}
+\definecolor{lavender}{rgb}{0.9,0.9,0.98}
+\definecolor{azure}{rgb}{0.94,1,1}
+\definecolor{honeydew}{rgb}{0.94,1,0.94}
+
+%:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%Requiere \usepackage{xcolor}
+\renewcommand{\arrayrulewidth}{1pt} 
+\newcommand{\mcaja}[1]{%
+{{\fboxsep 10pt \fboxrule 1pt%
+\fcolorbox{black}{orange}{%
+\color{black} \Huge #1}}}
+}
+\newcommand{\nuevobox}[1]{%
+{{\fboxsep 14pt \fboxrule 1pt%
+\fcolorbox{black}{darkgrey}{%
+\color{lavender} \huge #1}}}
+}
+\newcommand{\ssection}[1]{\section[#1]{\mcaja{#1}}}
+\makeatletter
+\newcommand{\sect}[1]{\subsection[#1]{\nuevobox{#1}}}
+\makeatletter
+\def\section{\@ifstar\unnumberedsection\numberedsection}
+\def\numberedsection{\@ifnextchar[%]
+\numberedsectionwithtwoarguments\numberedsectionwithoneargument}
+\def\unnumberedsection{\@ifnextchar[%]
+\unnumberedsectionwithtwoarguments\unnumberedsectionwithoneargument}
+\def\numberedsectionwithoneargument#1{\numberedsectionwithtwoarguments[#1]{#1}}
+\def\unnumberedsectionwithoneargument#1{\unnumberedsectionwithtwoarguments[#1]{#1}}
+\def\numberedsectionwithtwoarguments[#1]#2{%
+\ifhmode\par\fi
+\removelastskip
+\vskip 3ex\goodbreak
+\refstepcounter{section}%
+\begingroup
+%\noindent
+\leavevmode\large\bfseries\raggedright\mcaja%%
+\thesection\ #2\par\nobreak
+\endgroup
+\noindent\hrulefill\nobreak
+\vskip 2ex\nobreak
+\addcontentsline{toc}{section}{%
+\protect\numberline{\thesection}%
+#1}%
+}
+\def\unnumberedsectionwithtwoarguments[#1]#2{%
+\ifhmode\par\fi
+\removelastskip
+\vskip 3ex\goodbreak
+% \refstepcounter{section}%
+\begingroup
+\noindent
+\leavevmode\Large\bfseries\raggedright
+% \thesection\
+#2\par\nobreak
+\endgroup
+\noindent\hrulefill\nobreak
+\vskip 0ex\nobreak
+\addcontentsline{toc}{section}{%
+%
+\protect\numberline{\thesection}%
+#1}%
+}
+\makeatother
+%%%Cap\’itulos
+\usepackage{helvet}
+%\usepackage{psboxit,pstcol}
+\makeatletter
+\def\@makechapterhead#1{%
+{\parindent \z@ \raggedright \reset@font
+\hbox to \hsize{%
+\rlap{\raisebox{-2.5em}{\raisebox{\depth}{%%% Necesita la imagen "imgCapitulo"
+\includegraphics[width=10em]{logo_iaci2.eps}}}}%
+\rlap{\hbox to 6em{\hss
+\reset@font\sffamily\fontsize{8em}{8em}\selectfont\black
+\thechapter\hss}}%
+\hspace{10em}%
+\vbox{%
+\advance\hsize by -10em
+\reset@font\fontfamily{hv}\bfseries\Large
+#1
+\par
+}%
+}}%
+\vskip 5pt
+\hrulefill
+\vskip 50pt
+}
+\makeatother
+%----------------------------------------------------------------------------------------
+% Theorems
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corollary}{Corolario}[theorem]
+\newtheorem{lemma}[theorem]{Lema}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+\definecolor{titlepagecolor}{cmyk}{1,.73,0,.37}
+
+
+\newcommand\titlepagedecoration{%
+\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+
+\coordinate (aux1) at ([yshift=-15pt]current page.north east);
+\coordinate (aux2) at ([yshift=-410pt]current page.north east);
+\coordinate (aux3) at ([xshift=-4.5cm]current page.north east);
+\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+
+\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+\draw
+  (aux1) -- coordinate (a)
+  ++(225:5) --
+  ++(-45:5.1) coordinate (b);
+\draw[shorten <= -10pt]
+  (aux3) --
+  (a) --
+  (aux1);
+\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+  (b) --
+  ++(225:2.2) --
+  ++(-45:2.2);
+\end{scope}
+\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+  (aux4) --
+  ++(225:0.8) --
+  ++(-45:0.8);
+\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+\draw[shorten <= -10pt]
+  (aux2) --
+  ++(225:3) coordinate[pos=0.45] (c) --
+  ++(-45:3.1);
+\draw
+  (aux2) --
+  (c) --
+  ++(135:2.5) --
+  ++(45:2.5) --
+  ++(-45:2.5) coordinate[pos=0.3] (d);   
+\draw 
+  (d) -- +(45:1);
+\end{scope}
+\end{tikzpicture}%
+}
+
+
+\newcommand*{\plogo}{\fbox{$\mathcal{PL}$}}
+\newcommand*{\titleGP}{\begingroup % Create the command for including the title page in the document
+\centering % Center all text
+\vspace*{\baselineskip} % White space at the top of the page
+
+\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal line
+\rule{\textwidth}{0.4pt}\\[\baselineskip] % Thin horizontal line
+
+{\LARGE Teoría de las telecomunicaciones\\[0.3\baselineskip] Laboratorio 1}\\[0.2\baselineskip] % Title
+
+\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal line
+\rule{\textwidth}{1.6pt}\\[\baselineskip] % Thick horizontal line
+
+\scshape % Small caps
+ Martín Noblía 
+\vspace*{2\baselineskip} % Whitespace between location/year and editors
+
+Profesores: \\[\baselineskip]
+{\Large Fabian Iakinchuk\\ Martín Castillo\par}
+\vfill % Whitespace between editor names and publisher logo_iaci2
+\includegraphics[width=.175\textwidth]{logo_iaci2.eps}
+
+% Editor list
+{\itshape Universidad Nacional de Quilmes \par} % Editor affiliation
+
+\vfill % Whitespace between editor names and publisher logo
+
+%\plogo \\[0.3\baselineskip] % Publisher logo
+{\scshape 2015} \\[0.3\baselineskip] % Year published
+%{\large THE PUBLISHER}\par % Publisher
+
+\endgroup}
+
+%----------------------------------------------------------------------------------------
+%	BLANK DOCUMENT
+%----------------------------------------------------------------------------------------
+
+
+\begin{document}
+\pagestyle{empty} 
+
+\titleGP
+\titlepagedecoration
+
+\newpage
+\pagestyle{fancy}
+
+\section{Problema 1}
+
+Dada una fuente de datos en un archivo de texto nombrado:\textit{texto.txt}.
+Escribir un algoritmo de manera tal que calcule la probabilidad de ocurrencia 
+de cada símbolo existente en la fuente.
+Mostrar en un listado (sea en pantalla o en otro archivo \textit{.txt} cada 
+elemento de la fuente con su probabilidad calculada asociada.
+Calcular la entropía de la fuente.
+\subsection{resolución}
+Para resolver este problema utilizamos el lenguaje de programación Julia(\url{http://www.julialang.org})
+el cual es \textit{opensource}, dinámico y tiene velocidades de procesamiento relativas a C entre otras 
+caracteristicas.
+
+El script que realiza la tarea es el siguiente:
+
+\begin{verbatim}
+#= Script para el problema 1
+desde consola:
+julia problema1.jl
+=#
+# incluimos el modulo
+include("teleco.jl")
+# leemos el archivo
+T = open(readall,"../Archivos/texto.txt");
+# calculamos las frecuencias y probabilidades 
+d,p = Teleco.probs(T[1:end-1]);
+# Mostramos los resultados
+Teleco.show_source(d)
+# Calculamos la entropia de la fuente
+h = Teleco.entropy(p);
+print("La fuente discreta texto.txt tiene una entropia: $h [bits/simbolo]")
+\end{verbatim}
+
+Las definiciones de funciones estan agrupadas en el modulo \textit{Teleco}
+que esta definido en el archivo \textit{teleco.jl}. El cual mostramos a continuación:
+
+\begin{verbatim}
+# Modulo para el laboratorio1:Teoria de las telecomunicaciones
+module Teleco
+    
+
+function probs(iter)
+    # Funcion para calcular las probabilidades de ocurrencia de cada simbolo
+    # en una fuente de informacion discreta sin memoria.
+    # Input:
+    # -----
+    # iter: Cualquier fuente iterable(texto,vectores...etc) 
+    # Output:
+    # ------
+    # d: Diccionario con los elementos de la fuente y sus frecuencias
+    # p: Vector de probabilidades
+
+    d = Dict{eltype(iter), Int}()
+    l = length(iter)
+    
+    for e in iter
+        d[e] = get(d, e, 0) + 1 
+    end
+    p = collect((values(d))) / l 
+    return d,p
+end
+
+function freqs_pr(iter)
+    # Funcion para calcular 
+    pr = Collections.PriorityQueue()
+    
+    for e in iter
+        pr["$e"] = get(pr, "$e", 0) + 1 
+    end
+    
+    return pr
+end
+
+
+function entropy(p)
+   # Funcion para calcular la entropia de una 
+   # fuente discreta sin memoria
+   # Input:
+   # -----
+   # p: Vector de probabilidades de la fuente
+   # Output:
+   # ------
+   # h: Entropia de la fuente
+    i = log2(1./p)
+    aux = p.*i
+    h = sum(aux)
+    
+    return h
+
+end
+
+function show_source(d)
+    # Funcion para mostrar los elementos de una fuente 
+    # y su frecuencia de aparicion
+    for (v,k) in zip(values(d),keys(d))
+        println("elemento: $k --> frecuencia: $v")
+    end
+end    
+
+export probs, probs_pr,entropy, show_source
+
+
+end
+
+\end{verbatim}
+
+Cuya salida es:
+
+\begin{verbatim}
+elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema1.jl 
+elemento:   --> frecuencia: 22
+elemento: á --> frecuencia: 4
+elemento: l --> frecuencia: 6
+elemento: m --> frecuencia: 2
+elemento: r --> frecuencia: 5
+elemento: f --> frecuencia: 1
+elemento: o --> frecuencia: 3
+elemento: t --> frecuencia: 2
+elemento: a --> frecuencia: 14
+elemento: E --> frecuencia: 1
+elemento: v --> frecuencia: 2
+elemento: n --> frecuencia: 5
+elemento: e --> frecuencia: 13
+elemento: w --> frecuencia: 2
+elemento: h --> frecuencia: 3
+elemento: d --> frecuencia: 3
+elemento: c --> frecuencia: 2
+elemento: ; --> frecuencia: 1
+elemento: p --> frecuencia: 2
+elemento: i --> frecuencia: 4
+elemento: q --> frecuencia: 5
+elemento: s --> frecuencia: 4
+elemento: u --> frecuencia: 8
+La fuente discreta texto.txt tiene una entropia: 3.989736156368347 [bits/simbolo]
+\end{verbatim}
+
+\section{Problema 2}
+
+Dado un archivo de texto nombrado “texto2.txt” el cual posee una longitud fija de
+30 caracteres ASCII:
+
+Escribir un algoritmo que codifique
+cada elemento de la fuente usando codificación Huffman. (Dicha codificación puede ser
+mostrada en pantalla o en un archivo de salida *.txt).
+El software creado debe calcular la entropía y la longitud media del código generado.
+Calcular en forma manual o con el mismo software la eficiencia de la compresión.
+Verifique si el código generado es óptimo.
+
+\subsection{resolución}
+
+
+\newpage
+
+\section{Problema 3}
+Dado dos archivos de texto llamados Castellano.txt e ingles.txt, los cuales están en
+diferente lenguaje, comprimir los mismos en formato ZIP y:
+\begin{itemize}
+\item a) Realizar una tabla donde se pueda visualizar el cociente entre: (tamaño nuevo /
+tamaño original) x100.
+\item b) Realizar una tabla con la probabilidad de ocurrencia de cada uno de los caracteres
+para cada texto.
+\item c) Analizar los resultados de a) y b). Sacar conclusiones.
+\end{itemize}
+
+
+\newpage
+
+\begin{thebibliography}{6}
+ \bibitem{Principal}{Preparación y evaluación de Proyectos,cuarta edición,Nassir Sapag Chain, Reinaldo Sapag Chain}\\
+ \textbf{Enlaces}:
+\begin{center}
+\url{www.google.com.ar/}\\
+\url{http://www.lanacion.com.ar/}\\
+\url{http://www.espacioyconfort.com.ar/ }\\
+\end{center}
+
+\end{thebibliography}
+
+
+
+\end{document}

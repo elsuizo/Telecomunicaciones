@@ -1,2 +1,1 @@
-El hardware es lo que hace a una máquina rápida; el software es lo que hace que una máquina rápida se vuelva lenta
-
+El hardware es lo que hace a una mÃ¡quina rÃ¡pida; el software es lo que hace que una mÃ¡quina rÃ¡pida se vuelva lenta

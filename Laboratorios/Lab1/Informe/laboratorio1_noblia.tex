@@ -1,4 +1,5 @@
 \documentclass[10pt]{article}
+
 %-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*Packages--*--*--*--*--*--*--*--*--*--*--*--*--*
 \usepackage{amsmath}
 \usepackage{tikz}
@@ -52,7 +53,7 @@ cons-tan-tes o-pe-ra-cion i-lu-mi-na-cion}
 \newtheorem{defi}{{\it Definición}}[section]
 %@@@@@@@@@@@@@@@@@@@@@@@@@@@cabecera y pie de pagina @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-\rhead{\includegraphics[width=.075\textwidth]{logo_iaci2.eps}}
+\rhead{\includegraphics[width=.075\textwidth]{./Images/logo_iaci2.eps}}
 \chead{}
 \lhead{Teoría de las Telecomunicaciones}
 \rfoot{1º cuatrimestre 2015  }
@@ -141,7 +142,7 @@ cons-tan-tes o-pe-ra-cion i-lu-mi-na-cion}
 {\parindent \z@ \raggedright \reset@font
 \hbox to \hsize{%
 \rlap{\raisebox{-2.5em}{\raisebox{\depth}{%%% Necesita la imagen "imgCapitulo"
-\includegraphics[width=10em]{logo_iaci2.eps}}}}%
+\includegraphics[width=10em]{./Images/logo_iaci2.eps}}}}%
 \rlap{\hbox to 6em{\hss
 \reset@font\sffamily\fontsize{8em}{8em}\selectfont\black
 \thechapter\hss}}%
@@ -236,7 +237,7 @@ cons-tan-tes o-pe-ra-cion i-lu-mi-na-cion}
 Profesores: \\[\baselineskip]
 {\Large Fabian Iakinchuk\\ Martín Castillo\par}
 \vfill % Whitespace between editor names and publisher logo_iaci2
-\includegraphics[width=.175\textwidth]{logo_iaci2.eps}
+\includegraphics[width=.175\textwidth]{./Images/logo_iaci2.eps}
 
 % Editor list
 {\itshape Universidad Nacional de Quilmes \par} % Editor affiliation
@@ -258,6 +259,7 @@ Profesores: \\[\baselineskip]
 \pagestyle{empty} 
 
 \titleGP
+
 \titlepagedecoration
 
 \newpage
@@ -372,8 +374,8 @@ end
 Cuya salida es:
 
 \begin{verbatim}
+
 elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema1.jl 
-elemento:   --> frecuencia: 22
 elemento: á --> frecuencia: 4
 elemento: l --> frecuencia: 6
 elemento: m --> frecuencia: 2
@@ -396,8 +398,9 @@ elemento: i --> frecuencia: 4
 elemento: q --> frecuencia: 5
 elemento: s --> frecuencia: 4
 elemento: u --> frecuencia: 8
-La fuente discreta texto.txt tiene una entropia: 3.989736156368347 [bits/simbolo]
+La fuente discreta texto.txt tiene una entropia: 4.066909301939965 [bits/simbolo]
 \end{verbatim}
+
 
 \section{Problema 2}
 
@@ -420,27 +423,287 @@ Verifique si el código generado es óptimo.
 Dado dos archivos de texto llamados Castellano.txt e ingles.txt, los cuales están en
 diferente lenguaje, comprimir los mismos en formato ZIP y:
 \begin{itemize}
-\item a) Realizar una tabla donde se pueda visualizar el cociente entre: (tamaño nuevo /
+\item a- Realizar una tabla donde se pueda visualizar el cociente entre: (tamaño nuevo /
 tamaño original) x100.
-\item b) Realizar una tabla con la probabilidad de ocurrencia de cada uno de los caracteres
+\item b- Realizar una tabla con la probabilidad de ocurrencia de cada uno de los caracteres
 para cada texto.
-\item c) Analizar los resultados de a) y b). Sacar conclusiones.
+\item c- Analizar los resultados de a) y b). Sacar conclusiones.
 \end{itemize}
 
+\subsection{resolución}
+
+Para la resolver este problema utilizamos un script en el lenguaje Julia, cuya 
+salida de ejecución genera alguna de las respuestas. A continuación los códigos
+y las salidas:
+
+Script:
+
+\begin{verbatim}
+
+# Script para la resolucion del problema 3
+
+# incluimos el modulo
+include("teleco.jl")
+
+# leemos los bytes de la fuente castellano
+s1 = open(readbytes,"../Archivos/castellano.txt");
+# leemos los bytes de la fuente ingles
+s2 = open(readbytes,"../Archivos/ingles.txt");
+# leemos los bytes de la fuente castellano zipeada
+s1_zip = open(readbytes,"../Archivos/castellano.txt.zip");
+# leemos los bytes de la fuente ingles zipeada
+s2_zip = open(readbytes,"../Archivos/ingles.txt.zip");
+
+# calculamos las longitudes de los archivos(bytes)
+l1 = length(s1);
+l2 = length(s2);
+l1_zip = length(s1_zip);
+l2_zip = length(s2_zip);
+
+# calculamos los ratios
+r1 = (l1_zip / l1) * 100;
+r2 = (l2_zip / l2) * 100;
+
+# mostramos los resultados
+print("La eficiencia de compresión para el caso de la fuente en castellano es: $r1\n")
+
+print("La eficiencia de compresión para el caso de la fuente en ingles es: $r2\n")
+
+# Leemos los archivos como texto plano
+Tc = open(readall,"../Archivos/castellano.txt");
+Ti = open(readall,"../Archivos/ingles.txt");
+
+# Filtramos el texto para quitar los "\n" y los espacios " "
+Tc = filter!(x->(x!='\n')&&(x!=' '),collect(Tc));
+Ti = filter!(x->(x!='\n')&&(x!=' '),collect(Ti));
+
+# calculamos las frecuencias y probabilidades 
+dc,pc = Teleco.probs(Tc);
+d_i,p_i= Teleco.probs(Ti);
+# Mostramos los resultados
+println("Las frecuencias para el texto en castellano son:\n\n")
+Teleco.show_source(dc)
+println("Las frecuencias para el texto en ingles son:\n\n")
+Teleco.show_source(d_i)
+hc = Teleco.entropy(pc);
+hi = Teleco.entropy(p_i);
+
+print("La fuente discreta castellano.txt tiene una entropia: $hc [bits/simbolo]\n")
+print("La fuente discreta ingles.txt tiene una entropia: $hi [bits/simbolo]\n")
+\end{verbatim}
+
+Salida del script:
+
+\begin{verbatim}
+
+elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema3.jl 
+La eficiencia de compresión para el caso de la fuente en castellano es: 47.286527514231494
+La eficiencia de compresión para el caso de la fuente en ingles es: 46.04361370716511
+Las frecuencias para el texto en castellano son:
+
+
+elemento: r --> frecuencia: 257
+elemento: D --> frecuencia: 5
+elemento: T --> frecuencia: 3
+elemento: v --> frecuencia: 60
+elemento: Y --> frecuencia: 6
+elemento: y --> frecuencia: 56
+elemento: d --> frecuencia: 194
+elemento: c --> frecuencia: 152
+elemento: I --> frecuencia: 1
+elemento: g --> frecuencia: 55
+elemento: p --> frecuencia: 102
+elemento: i --> frecuencia: 198
+elemento: q --> frecuencia: 46
+elemento: S --> frecuencia: 4
+elemento: : --> frecuencia: 5
+elemento: á --> frecuencia: 26
+elemento: f --> frecuencia: 26
+elemento: ¿ --> frecuencia: 3
+elemento: b --> frecuencia: 64
+elemento: M --> frecuencia: 1
+elemento: C --> frecuencia: 2
+elemento: , --> frecuencia: 62
+elemento: E --> frecuencia: 10
+elemento: - --> frecuencia: 6
+elemento: z --> frecuencia: 19
+elemento: L --> frecuencia: 2
+elemento: é --> frecuencia: 28
+elemento: ú --> frecuencia: 1
+elemento: s --> frecuencia: 249
+elemento: t --> frecuencia: 172
+elemento: a --> frecuencia: 529
+elemento: P --> frecuencia: 3
+elemento: x --> frecuencia: 4
+elemento: ? --> frecuencia: 3
+elemento: e --> frecuencia: 521
+elemento: h --> frecuencia: 45
+elemento: ; --> frecuencia: 6
+elemento: A --> frecuencia: 6
+elemento: í --> frecuencia: 19
+elemento: V --> frecuencia: 1
+elemento: H --> frecuencia: 1
+elemento: l --> frecuencia: 225
+elemento: m --> frecuencia: 125
+elemento: ¡ --> frecuencia: 1
+elemento: o --> frecuencia: 322
+elemento: ó --> frecuencia: 30
+elemento: ñ --> frecuencia: 11
+elemento: U --> frecuencia: 1
+elemento: ! --> frecuencia: 1
+elemento: B --> frecuencia: 3
+elemento: n --> frecuencia: 293
+elemento: N --> frecuencia: 3
+elemento: k --> frecuencia: 1
+elemento: j --> frecuencia: 15
+elemento: . --> frecuencia: 33
+elemento: u --> frecuencia: 203
+Las frecuencias para el texto en ingles son:
+
+
+elemento: ' --> frecuencia: 2
+elemento: r --> frecuencia: 189
+elemento: D --> frecuencia: 2
+elemento: T --> frecuencia: 9
+elemento: v --> frecuencia: 26
+elemento: Y --> frecuencia: 3
+elemento: w --> frecuencia: 99
+elemento: y --> frecuencia: 81
+elemento: d --> frecuencia: 179
+elemento: c --> frecuencia: 82
+elemento: I --> frecuencia: 22
+elemento: g --> frecuencia: 96
+elemento: p --> frecuencia: 64
+elemento: i --> frecuencia: 229
+elemento: q --> frecuencia: 2
+elemento: S --> frecuencia: 3
+elemento: f --> frecuencia: 79
+elemento: M --> frecuencia: 1
+elemento: b --> frecuencia: 33
+elemento: C --> frecuencia: 5
+elemento: , --> frecuencia: 75
+elemento: E --> frecuencia: 3
+elemento: W --> frecuencia: 7
+elemento: - --> frecuencia: 1
+elemento: L --> frecuencia: 2
+elemento: s --> frecuencia: 221
+elemento: t --> frecuencia: 303
+elemento: a --> frecuencia: 326
+elemento: P --> frecuencia: 1
+elemento: x --> frecuencia: 2
+elemento: ? --> frecuencia: 3
+elemento: e --> frecuencia: 424
+elemento: h --> frecuencia: 224
+elemento: A --> frecuencia: 13
+elemento: J --> frecuencia: 1
+elemento: H --> frecuencia: 7
+elemento: G --> frecuencia: 2
+elemento: l --> frecuencia: 178
+elemento: m --> frecuencia: 102
+elemento: o --> frecuencia: 320
+elemento: ! --> frecuencia: 4
+elemento: B --> frecuencia: 1
+elemento: n --> frecuencia: 261
+elemento: F --> frecuencia: 2
+elemento: N --> frecuencia: 1
+elemento: k --> frecuencia: 32
+elemento: j --> frecuencia: 2
+elemento: . --> frecuencia: 39
+elemento: " --> frecuencia: 12
+elemento: u --> frecuencia: 105
+La fuente discreta castellano.txt tiene una entropia: 4.410238843123111 [bits/simbolo]
+La fuente discreta ingles.txt tiene una entropia: 4.430201945105413 [bits/simbolo]
+\end{verbatim}
 
 \newpage
 
+
+\section{Problema 4}
+Se propone simular una cuantización uniforme de 4, 3 y 2 bits para una señal
+sinusoidal de amplitud 1 y frecuencia 1 Hz.
+\begin{itemize}
+    \item a- Comparar la señal error y su relación con el número de bits de cuantizador
+para 4 bits ($q=2/16$), 3 bits ($q=2/8$) y 2 bits ($q=2/8$)
+    \item b- Sacar conclusiones.
+\end{itemize}
+\subsection{resolución}
+El modulo en donde guardamos las funciones es \textit{teleco2.jl} que utilizamos posteriormente en 
+el script \textit{problema4.jl}, donde comparamos la señal original $x(t) = Asin(2\pi f t)$ 
+con sus versiones quantizadas uniformemente (con los distintos niveles propuestos)
+
+A continuación su salida gráfica:
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/seniales_4_bits.eps}
+   \caption{Cuantización 4 bits}\label{fig:q:4}     
+\end{figure}
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/seniales_3_bits.eps}
+   \caption{Cuantización 3 bits}\label{fig:q:3}     
+\end{figure}
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/seniales_2_bits.eps}
+   \caption{Cuantización 2 bits}\label{fig:q:2}     
+\end{figure}
+
+Como se puede apreciar la señal de error $e(t)=x-x_{q_{i}}$ tiene amplitud más grande
+al cuantizar a la señal original con menos niveles.
+
+\section{Problema 5}
+Se propone ahora simular los efectos de la cuantización uniforme sobre una señal
+de voz (tomada de algún archivo de audio de pocos segundos de duración muestreada
+con n bits de manera que su calidad sea media).
+A partir de una señal de voz original se pide cuantizar la señal con menos bits que la
+original
+
+\begin{itemize}
+    \item a- Medir la SNR para cada uno de los casos anteriores y reproducir la señal cuantizada en la tarjeta de audio. Comentar los resultados.
+
+
+\subsection{resolución}
+Nuevamente se realizó un script(\textit{problema5.jl}) que realiza la lectura-escritura de los archivos \textit{wav}
+y además comparamos gráficamente todas las seniales. A continuación las salidas del mencionado script.
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_4_bits.eps}
+   \caption{Cuantización 4 bits}\label{fig:qv:4}     
+\end{figure}
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_3_bits.eps}
+   \caption{Cuantización 3 bits}\label{fig:qv:3}     
+\end{figure}
+
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_2_bits.eps}
+   \caption{Cuantización 2 bits}\label{fig:qv:2}     
+\end{figure}
+
+Como sabemos las seniales de voz estadisticamente tienen amplitudes bajas, osea que
+los niveles altos de voz son pocos probables, además si tomamos como indicador de como se
+degrada la senial de acuerdo a la varianza del error producido por el redondeo, vimos que
+la varianza $\sigma^{2}=\frac{q^{2}}{12}$ se corresponde con la potencia media de ruido 
+a la cuantización. Por ello como podemos ver en la cuantización uniforme el ruido se mantiene constante
+ya que $q$ es constante, pero como los niveles de amplitud no entonces la relación senial-ruido varía. 
+
+\end{itemize}
 \begin{thebibliography}{6}
- \bibitem{Principal}{Preparación y evaluación de Proyectos,cuarta edición,Nassir Sapag Chain, Reinaldo Sapag Chain}\\
- \textbf{Enlaces}:
-\begin{center}
-\url{www.google.com.ar/}\\
-\url{http://www.lanacion.com.ar/}\\
-\url{http://www.espacioyconfort.com.ar/ }\\
-\end{center}
-
+ \bibitem{Principal}{Digital communications, fundamentals and applications. Bernard Sklar}\\
+ \bibitem{Principal2}{Julia: A fresh approach to numerical computing. Jeff Bezanson, Alan Edelman, Stefan Karpinski, Viral B. Shah(2014)}\url{http://arxiv.org/abs/1411.1607}
 \end{thebibliography}
-
-
 
 \end{document}

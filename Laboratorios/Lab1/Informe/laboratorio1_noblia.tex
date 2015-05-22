@@ -267,10 +267,10 @@ Profesores: \\[\baselineskip]
 
 \section{Problema 1}
 
-Dada una fuente de datos en un archivo de texto nombrado:\textit{texto.txt}.
+Dada una fuente de datos en un archivo de texto nombrado:\verb|texto.txt|.
 Escribir un algoritmo de manera tal que calcule la probabilidad de ocurrencia 
 de cada símbolo existente en la fuente.
-Mostrar en un listado (sea en pantalla o en otro archivo \textit{.txt} cada 
+Mostrar en un listado (sea en pantalla o en otro archivo \verb|.txt| cada 
 elemento de la fuente con su probabilidad calculada asociada.
 Calcular la entropía de la fuente.
 \subsection{resolución}
@@ -298,8 +298,8 @@ h = Teleco.entropy(p);
 print("La fuente discreta texto.txt tiene una entropia: $h [bits/simbolo]")
 \end{verbatim}
 
-Las definiciones de funciones estan agrupadas en el modulo \textit{Teleco}
-que esta definido en el archivo \textit{teleco.jl}. El cual mostramos a continuación:
+Las definiciones de funciones estan agrupadas en el modulo \verb|Teleco|
+que esta definido en el archivo \verb|teleco.jl|. El cual mostramos a continuación:
 
 \begin{verbatim}
 # Modulo para el laboratorio1:Teoria de las telecomunicaciones
@@ -627,7 +627,7 @@ para 4 bits ($q=2/16$), 3 bits ($q=2/8$) y 2 bits ($q=2/8$)
     \item b- Sacar conclusiones.
 \end{itemize}
 \subsection{resolución}
-El modulo en donde guardamos las funciones es \textit{teleco2.jl} que utilizamos posteriormente en 
+El modulo en donde guardamos las funciones es \verb|teleco2.jl| que utilizamos posteriormente en 
 el script \textit{problema4.jl}, donde comparamos la señal original $x(t) = Asin(2\pi f t)$ 
 con sus versiones quantizadas uniformemente (con los distintos niveles propuestos)
 
@@ -666,10 +666,10 @@ original
 
 \begin{itemize}
     \item a- Medir la SNR para cada uno de los casos anteriores y reproducir la señal cuantizada en la tarjeta de audio. Comentar los resultados.
-
+\end{itemize}
 
 \subsection{resolución}
-Nuevamente se realizó un script(\textit{problema5.jl}) que realiza la lectura-escritura de los archivos \textit{wav}
+Nuevamente se realizó un script(\verb|problema5.jl|) que realiza la lectura-escritura de los archivos \verb|wav|
 y además comparamos gráficamente todas las seniales. A continuación las salidas del mencionado script.
 
 
@@ -692,15 +692,66 @@ y además comparamos gráficamente todas las seniales. A continuación las salid
    \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_2_bits.eps}
    \caption{Cuantización 2 bits}\label{fig:qv:2}     
 \end{figure}
+La relación senial-ruido para una senial cuantizada uniformemente se puede expresar:
+\begin{equation}
+\Bigg( \frac{S}{N} \Bigg)_{q} = \frac{L^{2}q^{2}/4}{q^{2}/12} = 3L^{2}
+\end{equation}
+Donde $L$ son los números de niveles de cuantización.
+
+Por ello para 2 bits de resolución tenemos(en $[Db]$):
+
+\verb|julia> 10*log10(12*1^2/2/(2/4)^2)|\\
+\verb|13.80211241711606|\\
+para 3 bits\\
+\verb|julia>10*log10(12*1^2/2/(2/8)^2)|\\
+\verb|19.822712330395685|\\
+para 4 bits\\
+\verb|julia>10*log10(12*1^2/2/(2/16)^2)|\\
+\verb|25.84331224367531|\\
+
+A la salida del script obtemos:
+\begin{verbatim}
+elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema5.jl 
+INFO: Loading help data...
+La relación senial-ruido para 2 bits es: 4.7383394267141[Db]
+La relación senial-ruido para 3 bits es: 9.682605271481124[Db]
+La relación senial-ruido para 4 bits es: 20.744776704544634[Db]
+\end{verbatim}
 
 Como sabemos las seniales de voz estadisticamente tienen amplitudes bajas, osea que
-los niveles altos de voz son pocos probables, además si tomamos como indicador de como se
+los niveles altos de voz son pocos probables, de alli que para esta senial de 
+voz obtenemos resultados distintos de los teoricos que modelan a la probabilidad 
+de $p(q)=1/q$ además si tomamos como indicador de como se
 degrada la senial de acuerdo a la varianza del error producido por el redondeo, vimos que
 la varianza $\sigma^{2}=\frac{q^{2}}{12}$ se corresponde con la potencia media de ruido 
 a la cuantización. Por ello como podemos ver en la cuantización uniforme el ruido se mantiene constante
 ya que $q$ es constante, pero como los niveles de amplitud no entonces la relación senial-ruido varía. 
 
+\section{Problema 6}
+Modificando el diagrama utilizado en la simulación de la cuantización uniforme para
+señales de voz para implementar el cuantizador ley-$\mu$.
+\begin{itemize}
+\item a- Medir la SNR para cada uno de los casos (cuantización de 4, 3 y 2 bits) y
+reproducir la señal cuantizada en la tarjeta de audio.
+\item b- Modificar el esquema y adicionar dos “SCOPE”, uno antes de comprimir la
+señal con un filtro con ley-$\mu$ y otro posterior al filtro con ley-$\mu$.
+Sacar conclusiones en base a lo visualizado.
+\item c- Comparar con los resultados del cuantizador uniforme y sacar
+conclusiones.
+\item d- Graficar la Densidad Espectral de la Señal (Utilizando Matlab) y Sacar
+Conclusiones:
+\begin{itemize}
+\item A la entrada del Sistema.
+\item A la salida del filtro ley-$\mu$.
+\item A la salida del Sistema.
 \end{itemize}
+\end{itemize}
+\subsection{resolución}
+
+%-------------------------------------------------------------------------
+% Bibliografia
+%-------------------------------------------------------------------------
+
 \begin{thebibliography}{6}
  \bibitem{Principal}{Digital communications, fundamentals and applications. Bernard Sklar}\\
  \bibitem{Principal2}{Julia: A fresh approach to numerical computing. Jeff Bezanson, Alan Edelman, Stefan Karpinski, Viral B. Shah(2014)}\url{http://arxiv.org/abs/1411.1607}

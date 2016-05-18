@@ -5,7 +5,7 @@ julia problema1.jl
 # incluimos el modulo
 include("teleco.jl")
 # leemos el archivo
-T = open(readall,"../Archivos/texto.txt");
+T = open(readall,"/home/elsuizo/Telecomunicaciones/Laboratorios/Lab1/Programas/Archivos/texto.txt");
 # Filtramos el texto para quitar los "\n" y los espacios " "
 T = filter!(x->(x!='\n')&&(x!=' '),collect(T));
 # calculamos las frecuencias y probabilidades 

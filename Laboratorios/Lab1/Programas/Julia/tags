@@ -1,0 +1,16 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+entropy	teleco.jl	/^function entropy(p)$/;"	f
+freqs_pr	teleco.jl	/^function freqs_pr(iter)$/;"	f
+huffmanCode	teleco.jl	/^function huffmanCode( huff_tree; rounding = 5)$/;"	f
+huffmanTree	teleco.jl	/^function huffmanTree( pd; rounding = 5)$/;"	f
+minvalue	teleco.jl	/^function minvalue(pd)$/;"	f
+probs	teleco.jl	/^function probs(iter)$/;"	f
+set_sin	teleco2.jl	/^function set_sin(N::Int,fs::Number,f::Number)$/;"	f
+show_source	teleco.jl	/^function show_source(d)$/;"	f
+unifor_quatization	teleco2.jl	/^function unifor_quatization(x::AbstractArray,N::Int)$/;"	f
+μ_quantization	teleco2.jl	/^function μ_quantization(x::AbstractArray,N::Int,μ::Int)$/;"	f

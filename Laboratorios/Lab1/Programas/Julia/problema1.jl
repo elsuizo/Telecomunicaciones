@@ -13,5 +13,5 @@ d,p = Teleco.probs(T);
 # Mostramos los resultados
 Teleco.show_source(d)
 # Calculamos la entropia de la fuente
-h = Teleco.entropy(p);
+h = Teleco.entropy(d);
 print("La fuente discreta texto.txt tiene una entropia: $h [bits/simbolo]\n")

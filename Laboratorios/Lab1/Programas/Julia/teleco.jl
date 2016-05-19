@@ -13,19 +13,20 @@ function probs(iter)
     # d: Diccionario con los elementos de la fuente y sus frecuencias
     # p: Vector de probabilidades
 
-    d = Dict{eltype(iter), Int}()
-    #d_floats = Dict{eltype(iter), AbstractFloat}()
+    d = Dict()
+    d_floats = Dict()
     l = length(iter)
 
     for e in iter
-        d[e] = get(d, e, 0) + 1
+        #d[e] = get(d, e, 0) + 1
+        d["$e"] = get(d, "$e", 0) + 1
     end
     p = collect((values(d))) / l
-    #for (k,v) in d
-    #   d_floats[k] = p[v]
-    #end
+    for (index,value) in enumerate(d)
+       d_floats[value] = p[index]
+    end
 
-    return d,p
+    return d_floats,p
 end
 
 function freqs_pr(iter)
@@ -40,21 +41,13 @@ function freqs_pr(iter)
 end
 
 
-function entropy(p)
-   # Funcion para calcular la entropia de una
-   # fuente discreta sin memoria
-   # Input:
-   # -----
-   # p: Vector de probabilidades de la fuente
-   # Output:
-   # ------
-   # h: Entropia de la fuente
-    i = log2(1. / p)
-    aux = p .* i
-    h = sum(aux)
 
-    return h
-
+function show_code(d)
+    # Funcion para mostrar los elementos de una fuente 
+    # y su codigo de Huffman
+    for (v,k) in zip(values(d),keys(d))
+        println("elemento: $k --> codigo: $v")
+    end
 end
 
 function show_source(d)
@@ -66,25 +59,10 @@ function show_source(d)
 end
 
 #=------------------------------------------------------------------------------
-                        Huffmann stuff
+                        Huffman 
 ------------------------------------------------------------------------------=#
-
-#=------------------------------------------------------------------------------
-                        como el de Python
-------------------------------------------------------------------------------=#
-function encode(freqs)
-
-
-end
-
-
-
-
-#=------------------------------------------------------------------------------
-                        como el de Rosetta
-------------------------------------------------------------------------------=#
-# returns the least value of dictionary enteries
-function minvalue(pd)
+# Devuelve el valor minimo de un Dict
+function min_value(pd)
     runonce = false
     (kmin,cmin) = (nothing,nothing)
 
@@ -100,58 +78,91 @@ function minvalue(pd)
     return (kmin,cmin)
 end
 
-function huffmanTree(pd)
-    huffman_tree = copy(pd)
-    #@show huffman_tree
+# Creamos el arbol de Huffman
+function huffman_tree(pd; rounding = 5)
+   huffman = copy(pd)
 
-    while(length(huffman_tree) > 1)
-        cmb_prob = 0
-        pair = Dict()
+   while(length(huffman) > 1)
+     cum_prob = 0.0
+     pair = Dict()
+     
+     m = (k,v) = min_value(huffman) 
+     push!(pair,k,v) 
+     cum_prob += pop!(huffman, k)
+     
+     m = (k,v) = min_value(huffman)
+     push!(pair,k,v) 
+     cum_prob += pop!(huffman, k)
+     
+     push!(huffman, pair, round(cum_prob,rounding))
+   end
 
-        #get first new item
-        m = (k,v) = minimum(huffman_tree) # get the smallest value form the huffman tree
-        #@show m
-        #push!(pair,k,v)
-        setindex!(pair,k,v)
-        cmb_prob += pop!(huffman_tree,k)
-
-        m = (k,v) = minimum(huffman_tree) # get the smallest value form the huffman tree
-        @show pair
-        setindex!(pair,v,k)
-        cmb_prob += pop!(huffman_tree,k)
-
-        #push!(huffman_tree,pair,round(cmb_prob,rounding))
-        setindex!(huffman_tree,pair, cmb_prob)
-    end
-
-    return huffman_tree
+   return huffman
 end
 
-# given a huffman tree create a huffman code
-function huffmanCode( huff_tree; rounding = 5)
-    huff_code = copy(huff_tree)
-    # set the first node to the empty string which will let the coding propagate down the tree
-    top = collect(keys(huff_code))[1]
-    huff_code[top] = ""
+# A partir del arbol creamos el codigo
+function huffman_code(huff_tree; rounding = 5)
+   huff_code = copy(huff_tree)
+   top = collect(keys(huff_code))[1]
+   huff_code[top] = ""
 
-    while( sum(map((x)->(isa(x,Dict)), collect(keys(huff_code)))) > 0)
-        # this is complicated way of asking "Are there any Dictionaries left?", which is
-        # equivalent to the question "Are all the letters encoded?"
-        for (k,c) in huff_code
-            if( isa(k,Dict) )
-                kz = collect(keys(k))
-                push!(huff_code, kz[1], c*"0")
-                push!(huff_code, kz[2], c*"1")
-                pop!(huff_code,k) # remove the node, leaving the lower nodes
-            end
-        end
-    end
+   while(sum(map((x)->(isa(x,Dict)), collect(keys(huff_code)))) > 0)
+     for (k,c) in huff_code
+         if(isa(k,Dict))
+             kz = collect(keys(k))
+             push!(huff_code, kz[1], c*"0")
+             push!(huff_code, kz[2], c*"1")
+             pop!(huff_code,k) 
+         end
+     end
+   end
 
-    return huff_code
- end
+   return huff_code
+end
 
 
-export probs, probs_pr,entropy, show_source
+function entropy(pd::Dict{Any,Any})
+   h = 0.0
+   for (s_i, p_i) in pd
+     h += (p_i * log2(1.0/p_i))
+   end
+
+   return h
+end
+
+function entropy(p)
+   # Funcion para calcular la entropia de una 
+   # fuente discreta sin memoria
+   # Input:
+   # -----
+   # p: Vector de probabilidades de la fuente
+   # Output:
+   # ------
+   # h: Entropia de la fuente
+    i = log2(1./p)
+    aux = p.*i
+    h = sum(aux)
+    
+    return h
+
+end
+
+function L̄(c::Dict{Any,Any}, d::Dict{Any,Any}) 
+   new = Dict()
+   l = 0.0
+   for (k, v) in zip(values(c), values(d))
+      new[k] = v 
+   end
+
+   for (s_i,p_i) in new
+   l += (p_i * length(s_i))
+   end
+      
+   return l
+end
+
+
+export probs, probs_pr,entropy, show_source, huffman_tree, huffman_code, L̄
 
 
 end

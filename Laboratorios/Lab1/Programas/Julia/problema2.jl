@@ -27,10 +27,23 @@
 include("teleco.jl")
 # leemos el archivo
 T = open(readall,"/home/elsuizo/Telecomunicaciones/Laboratorios/Lab1/Programas/Archivos/texto2.txt");
-# Filtramos el texto para quitar los "\n" y los espacios " "
-T = filter!(x->(x!='\n')&&(x!=' '),collect(T));
+# Filtramos el texto para quitar los "\n" 
+T = filter!(x->(x!='\n'), collect(T));
 # calculamos las frecuencias y probabilidades 
 d,p = Teleco.probs(T);
-#pr = Teleco.freqs_pr(T)
-tree = Teleco.huffmanTree(d)
-
+# generamos el arbol de Huffman
+tree = Teleco.huffman_tree(d)
+# generamos el codigo de Huffman
+c = Teleco.huffman_code(tree)
+# mostramos las salidas
+println("Fuente y sus probabilidades")
+Teleco.show_source(d)
+println("Fuente y sus codigos de Huffmann")
+Teleco.show_code(c)
+h = Teleco.entropy(d);
+print("La fuente discreta texto2.txt tiene una entropia: $h [bits/simbolo]\n")
+L_hat = Teleco.L̄(c, d)
+print("El codigo de Huffmann de la fuente discreta texto2.txt tiene una longitud promedio: $L_hat [bits/simbolo]\n")
+# Calculo de la eficiencia
+η = (h/L_hat) * 100
+print("La eficiencia del codigo Huffman para la fuente discreta texto2.txt es: $η")

@@ -1,7 +1,4 @@
-#= Script para el problema 1
-desde consola:
-julia problema1.jl
-=#
+# Resolucion problema 1
 # incluimos el modulo
 include("teleco.jl")
 # leemos el archivo

@@ -46,7 +46,7 @@ function show_code(d)
     # Funcion para mostrar los elementos de una fuente 
     # y su codigo de Huffman
     for (v,k) in zip(values(d),keys(d))
-        println("elemento: $k --> codigo: $v")
+        println("elemento: $(k[1]) --> codigo: $v")
     end
 end
 
@@ -54,7 +54,7 @@ function show_source(d)
     # Funcion para mostrar los elementos de una fuente 
     # y su frecuencia de aparicion
     for (v,k) in zip(values(d),keys(d))
-        println("elemento: $k --> frecuencia: $v")
+        println("elemento: $(k[1]) --> frecuencia: $(k[2]) --> probabilidad: $(v)")
     end
 end
 
@@ -161,8 +161,16 @@ function L̄(c::Dict{Any,Any}, d::Dict{Any,Any})
    return l
 end
 
+function kraft_mcmillan(c::Dict{Any, Any})
+   K = 0.0
+   for (s, code) in c
+      K += 2.0^(-length(code))
+   end
+   return K
+end
 
-export probs, probs_pr,entropy, show_source, huffman_tree, huffman_code, L̄
+
+export probs, probs_pr,entropy, show_source, huffman_tree, huffman_code, L̄, kraft_mcmillan
 
 
 end

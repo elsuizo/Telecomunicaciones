@@ -48,28 +48,30 @@ h₃(t, T, A) = Δ₃(T-t, T, A)
 T_b = 2
 A = 1
 t = collect(linspace(0,3))
-L = length(s₁)
 #-------------------------------------------------------------------------
 # envio s1a
 s₁ = s1a(t, T_b, A)
-n₀₁ = randn(L)
+L₁ = length(s₁)
+n₀₁ = randn(L₁)
 # le agregamos ruido
 r₁ = s₁ + n₀₁
-ŝ₁ = xcorr(r, h₁(t, T_b, A)) ./ L # estimacion
+ŝ₁ = xcorr(r₁, h₁(t, T_b, A)) ./ L₁ # estimacion
 #-------------------------------------------------------------------------
 # envio s2a
 s₂ = s2a(t, T_b, A)
-n₀₂ = randn(L)
+L₂ = length(s₂)
+n₀₂ = randn(L₂)
 # le agregamos ruido
 r₂ = s₂ + n₀₂
-ŝ₂ = xcorr(r, h₂(t, T_b, A)) ./ L # estimacion
+ŝ₂ = xcorr(r₂, h₂(t, T_b, A)) ./ L₂ # estimacion
 #-------------------------------------------------------------------------
 # envio s3a
 s₃ = s3a(t, T_b, A)
-n₀₃ = randn(L)
+L₃ = length(s₃)
+n₀₃ = randn(L₃)
 # le agregamos ruido
 r₃ = s₃ + n₀₃
-ŝ₃ = xcorr(r, h₃(t, T_b, A)) ./ L #estimacion
+ŝ₃ = xcorr(r₃, h₃(t, T_b, A)) ./ L₃ #estimacion
 
 # plot primer conjunto
 #-------------------------------------------------------------------------

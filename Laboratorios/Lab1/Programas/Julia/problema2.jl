@@ -26,9 +26,9 @@
 # incluimos el modulo
 include("teleco.jl")
 # leemos el archivo
-T = open(readall,"/home/elsuizo/Telecomunicaciones/Laboratorios/Lab1/Programas/Archivos/texto2.txt");
+T = open(readall,"../Archivos/texto2.txt");
 # Filtramos el texto para quitar los "\n" 
-T = filter!(x->(x!='\n'), collect(T));
+T = filter!(x->(x!='\n')&&(x!=' '),collect(T));
 # calculamos las frecuencias y probabilidades 
 d,p = Teleco.probs(T);
 # generamos el arbol de Huffman
@@ -41,9 +41,12 @@ Teleco.show_source(d)
 println("Fuente y sus codigos de Huffmann")
 Teleco.show_code(c)
 h = Teleco.entropy(d);
-print("La fuente discreta texto2.txt tiene una entropia: $h [bits/simbolo]\n")
+println("La fuente discreta texto2.txt tiene una entropia: $h [bits/simbolo]\n")
 L_hat = Teleco.L̄(c, d)
 print("El codigo de Huffmann de la fuente discreta texto2.txt tiene una longitud promedio: $L_hat [bits/simbolo]\n")
 # Calculo de la eficiencia
-η = (h/L_hat) * 100
-print("La eficiencia del codigo Huffman para la fuente discreta texto2.txt es: $η")
+η = (h / L_hat) * 100
+println("La eficiencia del codigo Huffman para la fuente discreta texto2.txt es: $η")
+# verificamos si el codigo es optimo
+K = Teleco.kraft_mcmillan(c)
+println("Es el codigo generado optimo? : ", K==1)

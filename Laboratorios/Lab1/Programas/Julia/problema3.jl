@@ -43,8 +43,12 @@ println("Las frecuencias para el texto en castellano son:\n\n")
 Teleco.show_source(dc)
 println("Las frecuencias para el texto en ingles son:\n\n")
 Teleco.show_source(d_i)
+# convertimos los vectores a Floats
+pc = convert(Array{Float64,1}, pc)
+p_i = convert(Array{Float64,1}, p_i)
+# calculamos las entropias
 hc = Teleco.entropy(pc);
 hi = Teleco.entropy(p_i);
 
-print("La fuente discreta castellano.txt tiene una entropia: $hc [bits/simbolo]\n")
-print("La fuente discreta ingles.txt tiene una entropia: $hi [bits/simbolo]\n")
+println("La fuente discreta castellano.txt tiene una entropia: $hc [bits/simbolo]")
+print("La fuente discreta ingles.txt tiene una entropia: $hi [bits/simbolo]")

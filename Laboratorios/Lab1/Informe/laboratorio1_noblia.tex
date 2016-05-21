@@ -38,7 +38,12 @@
 \usepackage{wallpaper}
 \usepackage{textcomp}
 %-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
-
+%\usepackage{fontspec}
+%\setmainfont{FreeSerif}
+%\setmonofont{FreeMono}
+%\usepackage{texments}
+%\usepackage[demo]{graphicx}
+%\usepackage{subfig}
 %*****************************definiciones*******************************
 \oddsidemargin -0.2in \textwidth 7.0in \topmargin -0.9in \textheight
 9.0in
@@ -274,130 +279,42 @@ Mostrar en un listado (sea en pantalla o en otro archivo \verb|.txt| cada
 elemento de la fuente con su probabilidad calculada asociada.
 Calcular la entropía de la fuente.
 \subsection{resolución}
-Para resolver este problema utilizamos el lenguaje de programación Julia(\url{http://www.julialang.org})
+Para resolver todos los problemas utilizamos el lenguaje de programación Julia(\url{http://www.julialang.org})
 el cual es \textit{opensource}, dinámico y tiene velocidades de procesamiento relativas a C entre otras 
 caracteristicas.
 
-El script que realiza la tarea es el siguiente:
-
-\begin{verbatim}
-#= Script para el problema 1
-desde consola:
-julia problema1.jl
-=#
-# incluimos el modulo
-include("teleco.jl")
-# leemos el archivo
-T = open(readall,"../Archivos/texto.txt");
-# calculamos las frecuencias y probabilidades 
-d,p = Teleco.probs(T[1:end-1]);
-# Mostramos los resultados
-Teleco.show_source(d)
-# Calculamos la entropia de la fuente
-h = Teleco.entropy(p);
-print("La fuente discreta texto.txt tiene una entropia: $h [bits/simbolo]")
-\end{verbatim}
-
 Las definiciones de funciones estan agrupadas en el modulo \verb|Teleco|
-que esta definido en el archivo \verb|teleco.jl|. El cual mostramos a continuación:
-
-\begin{verbatim}
-# Modulo para el laboratorio1:Teoria de las telecomunicaciones
-module Teleco
-    
-
-function probs(iter)
-    # Funcion para calcular las probabilidades de ocurrencia de cada simbolo
-    # en una fuente de informacion discreta sin memoria.
-    # Input:
-    # -----
-    # iter: Cualquier fuente iterable(texto,vectores...etc) 
-    # Output:
-    # ------
-    # d: Diccionario con los elementos de la fuente y sus frecuencias
-    # p: Vector de probabilidades
-
-    d = Dict{eltype(iter), Int}()
-    l = length(iter)
-    
-    for e in iter
-        d[e] = get(d, e, 0) + 1 
-    end
-    p = collect((values(d))) / l 
-    return d,p
-end
-
-function freqs_pr(iter)
-    # Funcion para calcular 
-    pr = Collections.PriorityQueue()
-    
-    for e in iter
-        pr["$e"] = get(pr, "$e", 0) + 1 
-    end
-    
-    return pr
-end
+que esta definido en el archivo \verb|teleco.jl|.
 
 
-function entropy(p)
-   # Funcion para calcular la entropia de una 
-   # fuente discreta sin memoria
-   # Input:
-   # -----
-   # p: Vector de probabilidades de la fuente
-   # Output:
-   # ------
-   # h: Entropia de la fuente
-    i = log2(1./p)
-    aux = p.*i
-    h = sum(aux)
-    
-    return h
-
-end
-
-function show_source(d)
-    # Funcion para mostrar los elementos de una fuente 
-    # y su frecuencia de aparicion
-    for (v,k) in zip(values(d),keys(d))
-        println("elemento: $k --> frecuencia: $v")
-    end
-end    
-
-export probs, probs_pr,entropy, show_source
-
-
-end
-
-\end{verbatim}
 
 Cuya salida es:
 
 \begin{verbatim}
-
-elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema1.jl 
-elemento: á --> frecuencia: 4
-elemento: l --> frecuencia: 6
-elemento: m --> frecuencia: 2
-elemento: r --> frecuencia: 5
-elemento: f --> frecuencia: 1
-elemento: o --> frecuencia: 3
-elemento: t --> frecuencia: 2
-elemento: a --> frecuencia: 14
-elemento: E --> frecuencia: 1
-elemento: v --> frecuencia: 2
-elemento: n --> frecuencia: 5
-elemento: e --> frecuencia: 13
-elemento: w --> frecuencia: 2
-elemento: h --> frecuencia: 3
-elemento: d --> frecuencia: 3
-elemento: c --> frecuencia: 2
-elemento: ; --> frecuencia: 1
-elemento: p --> frecuencia: 2
-elemento: i --> frecuencia: 4
-elemento: q --> frecuencia: 5
-elemento: s --> frecuencia: 4
-elemento: u --> frecuencia: 8
+julia> include("problema1.jl")
+WARNING: replacing module Teleco
+elemento: p --> frecuencia: 2 --> probabilidad: 0.021739130434782608
+elemento: h --> frecuencia: 3 --> probabilidad: 0.03260869565217391
+elemento: m --> frecuencia: 2 --> probabilidad: 0.021739130434782608
+elemento: ; --> frecuencia: 1 --> probabilidad: 0.010869565217391304
+elemento: v --> frecuencia: 2 --> probabilidad: 0.021739130434782608
+elemento: q --> frecuencia: 5 --> probabilidad: 0.05434782608695652
+elemento: t --> frecuencia: 2 --> probabilidad: 0.021739130434782608
+elemento: e --> frecuencia: 13 --> probabilidad: 0.14130434782608695
+elemento: n --> frecuencia: 5 --> probabilidad: 0.05434782608695652
+elemento: d --> frecuencia: 3 --> probabilidad: 0.03260869565217391
+elemento: l --> frecuencia: 6 --> probabilidad: 0.06521739130434782
+elemento: f --> frecuencia: 1 --> probabilidad: 0.010869565217391304
+elemento: w --> frecuencia: 2 --> probabilidad: 0.021739130434782608
+elemento: i --> frecuencia: 4 --> probabilidad: 0.043478260869565216
+elemento: E --> frecuencia: 1 --> probabilidad: 0.010869565217391304
+elemento: á --> frecuencia: 4 --> probabilidad: 0.043478260869565216
+elemento: a --> frecuencia: 14 --> probabilidad: 0.15217391304347827
+elemento: r --> frecuencia: 5 --> probabilidad: 0.05434782608695652
+elemento: u --> frecuencia: 8 --> probabilidad: 0.08695652173913043
+elemento: o --> frecuencia: 3 --> probabilidad: 0.03260869565217391
+elemento: s --> frecuencia: 4 --> probabilidad: 0.043478260869565216
+elemento: c --> frecuencia: 2 --> probabilidad: 0.021739130434782608
 La fuente discreta texto.txt tiene una entropia: 4.066909301939965 [bits/simbolo]
 \end{verbatim}
 
@@ -416,6 +333,51 @@ Verifique si el código generado es óptimo.
 
 \subsection{resolución}
 
+Nuevamente las funciones que implementan los algoritmos para la resolucion de este
+problema estan en el archivo \verb|teleco.jl|.
+El script que organiza la resolucion del problema es el siguiente:
+
+Cuya salida es:
+
+\begin{verbatim}
+julia> include("problema2.jl")
+WARNING: replacing module Teleco
+Fuente y sus probabilidades
+elemento: ú --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: i --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: e --> frecuencia: 4 --> probabilidad: 0.13333333333333333
+elemento: l --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: u --> frecuencia: 2 --> probabilidad: 0.06666666666666667
+elemento: a --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: j --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: o --> frecuencia: 4 --> probabilidad: 0.13333333333333333
+elemento: . --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: m --> frecuencia: 3 --> probabilidad: 0.1
+elemento: s --> frecuencia: 2 --> probabilidad: 0.06666666666666667
+elemento: T --> frecuencia: 1 --> probabilidad: 0.03333333333333333
+elemento: t --> frecuencia: 3 --> probabilidad: 0.1
+elemento: r --> frecuencia: 5 --> probabilidad: 0.16666666666666666
+Fuente y sus codigos de Huffmann
+elemento: ú --> codigo: 1110
+elemento: i --> codigo: 01001
+elemento: e --> codigo: 000
+elemento: l --> codigo: 01000
+elemento: u --> codigo: 0101
+elemento: j --> codigo: 00100
+elemento: a --> codigo: 00101
+elemento: o --> codigo: 100
+elemento: m --> codigo: 101
+elemento: . --> codigo: 00111
+elemento: s --> codigo: 1111
+elemento: T --> codigo: 00110
+elemento: t --> codigo: 110
+elemento: r --> codigo: 011
+La fuente discreta texto2.txt tiene una entropia: 3.53624341298306 [bits/simbolo]
+
+El codigo de Huffmann de la fuente discreta texto2.txt tiene una longitud promedio: 3.6999999999999997 [bits/simbolo]
+La eficiencia del codigo Huffman para la fuente discreta texto2.txt es: 95.57414629683947
+Es el codigo generado optimo? : true
+\end{verbatim}
 
 \newpage
 
@@ -427,195 +389,141 @@ diferente lenguaje, comprimir los mismos en formato ZIP y:
 tamaño original) x100.
 \item b- Realizar una tabla con la probabilidad de ocurrencia de cada uno de los caracteres
 para cada texto.
-\item c- Analizar los resultados de a) y b). Sacar conclusiones.
+\item c- Analizar los resultados de a y b. Sacar conclusiones.
 \end{itemize}
 
 \subsection{resolución}
 
 Para la resolver este problema utilizamos un script en el lenguaje Julia, cuya 
-salida de ejecución genera alguna de las respuestas. A continuación los códigos
-y las salidas:
-
-Script:
-
-\begin{verbatim}
-
-# Script para la resolucion del problema 3
-
-# incluimos el modulo
-include("teleco.jl")
-
-# leemos los bytes de la fuente castellano
-s1 = open(readbytes,"../Archivos/castellano.txt");
-# leemos los bytes de la fuente ingles
-s2 = open(readbytes,"../Archivos/ingles.txt");
-# leemos los bytes de la fuente castellano zipeada
-s1_zip = open(readbytes,"../Archivos/castellano.txt.zip");
-# leemos los bytes de la fuente ingles zipeada
-s2_zip = open(readbytes,"../Archivos/ingles.txt.zip");
-
-# calculamos las longitudes de los archivos(bytes)
-l1 = length(s1);
-l2 = length(s2);
-l1_zip = length(s1_zip);
-l2_zip = length(s2_zip);
-
-# calculamos los ratios
-r1 = (l1_zip / l1) * 100;
-r2 = (l2_zip / l2) * 100;
-
-# mostramos los resultados
-print("La eficiencia de compresión para el caso de la fuente en castellano es: $r1\n")
-
-print("La eficiencia de compresión para el caso de la fuente en ingles es: $r2\n")
-
-# Leemos los archivos como texto plano
-Tc = open(readall,"../Archivos/castellano.txt");
-Ti = open(readall,"../Archivos/ingles.txt");
-
-# Filtramos el texto para quitar los "\n" y los espacios " "
-Tc = filter!(x->(x!='\n')&&(x!=' '),collect(Tc));
-Ti = filter!(x->(x!='\n')&&(x!=' '),collect(Ti));
-
-# calculamos las frecuencias y probabilidades 
-dc,pc = Teleco.probs(Tc);
-d_i,p_i= Teleco.probs(Ti);
-# Mostramos los resultados
-println("Las frecuencias para el texto en castellano son:\n\n")
-Teleco.show_source(dc)
-println("Las frecuencias para el texto en ingles son:\n\n")
-Teleco.show_source(d_i)
-hc = Teleco.entropy(pc);
-hi = Teleco.entropy(p_i);
-
-print("La fuente discreta castellano.txt tiene una entropia: $hc [bits/simbolo]\n")
-print("La fuente discreta ingles.txt tiene una entropia: $hi [bits/simbolo]\n")
-\end{verbatim}
+salida de ejecución genera las respuestas a y b. A continuación la salida del script
+\verb|problema3.jl|
 
 Salida del script:
 
 \begin{verbatim}
-
-elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema3.jl 
+julia> include("problema3.jl")
+WARNING: replacing module Teleco
 La eficiencia de compresión para el caso de la fuente en castellano es: 47.286527514231494
 La eficiencia de compresión para el caso de la fuente en ingles es: 46.04361370716511
 Las frecuencias para el texto en castellano son:
 
 
-elemento: r --> frecuencia: 257
-elemento: D --> frecuencia: 5
-elemento: T --> frecuencia: 3
-elemento: v --> frecuencia: 60
-elemento: Y --> frecuencia: 6
-elemento: y --> frecuencia: 56
-elemento: d --> frecuencia: 194
-elemento: c --> frecuencia: 152
-elemento: I --> frecuencia: 1
-elemento: g --> frecuencia: 55
-elemento: p --> frecuencia: 102
-elemento: i --> frecuencia: 198
-elemento: q --> frecuencia: 46
-elemento: S --> frecuencia: 4
-elemento: : --> frecuencia: 5
-elemento: á --> frecuencia: 26
-elemento: f --> frecuencia: 26
-elemento: ¿ --> frecuencia: 3
-elemento: b --> frecuencia: 64
-elemento: M --> frecuencia: 1
-elemento: C --> frecuencia: 2
-elemento: , --> frecuencia: 62
-elemento: E --> frecuencia: 10
-elemento: - --> frecuencia: 6
-elemento: z --> frecuencia: 19
-elemento: L --> frecuencia: 2
-elemento: é --> frecuencia: 28
-elemento: ú --> frecuencia: 1
-elemento: s --> frecuencia: 249
-elemento: t --> frecuencia: 172
-elemento: a --> frecuencia: 529
-elemento: P --> frecuencia: 3
-elemento: x --> frecuencia: 4
-elemento: ? --> frecuencia: 3
-elemento: e --> frecuencia: 521
-elemento: h --> frecuencia: 45
-elemento: ; --> frecuencia: 6
-elemento: A --> frecuencia: 6
-elemento: í --> frecuencia: 19
-elemento: V --> frecuencia: 1
-elemento: H --> frecuencia: 1
-elemento: l --> frecuencia: 225
-elemento: m --> frecuencia: 125
-elemento: ¡ --> frecuencia: 1
-elemento: o --> frecuencia: 322
-elemento: ó --> frecuencia: 30
-elemento: ñ --> frecuencia: 11
-elemento: U --> frecuencia: 1
-elemento: ! --> frecuencia: 1
-elemento: B --> frecuencia: 3
-elemento: n --> frecuencia: 293
-elemento: N --> frecuencia: 3
-elemento: k --> frecuencia: 1
-elemento: j --> frecuencia: 15
-elemento: . --> frecuencia: 33
-elemento: u --> frecuencia: 203
+elemento: m --> frecuencia: 125 --> probabilidad: 0.02962085308056872
+elemento: h --> frecuencia: 45 --> probabilidad: 0.01066350710900474
+elemento: E --> frecuencia: 10 --> probabilidad: 0.002369668246445498
+elemento: t --> frecuencia: 172 --> probabilidad: 0.04075829383886256
+elemento: C --> frecuencia: 2 --> probabilidad: 0.00047393364928909954
+elemento: s --> frecuencia: 249 --> probabilidad: 0.05900473933649289
+elemento: d --> frecuencia: 194 --> probabilidad: 0.04597156398104266
+elemento: , --> frecuencia: 62 --> probabilidad: 0.014691943127962086
+elemento: b --> frecuencia: 64 --> probabilidad: 0.015165876777251185
+elemento: M --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: T --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: i --> frecuencia: 198 --> probabilidad: 0.04691943127962085
+elemento: P --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: V --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: ¡ --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: ? --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: v --> frecuencia: 60 --> probabilidad: 0.014218009478672985
+elemento: S --> frecuencia: 4 --> probabilidad: 0.0009478672985781991
+elemento: r --> frecuencia: 257 --> probabilidad: 0.060900473933649286
+elemento: l --> frecuencia: 225 --> probabilidad: 0.0533175355450237
+elemento: z --> frecuencia: 19 --> probabilidad: 0.004502369668246445
+elemento: y --> frecuencia: 56 --> probabilidad: 0.013270142180094787
+elemento: q --> frecuencia: 46 --> probabilidad: 0.010900473933649289
+elemento: U --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: D --> frecuencia: 5 --> probabilidad: 0.001184834123222749
+elemento: á --> frecuencia: 26 --> probabilidad: 0.006161137440758294
+elemento: N --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: H --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: j --> frecuencia: 15 --> probabilidad: 0.0035545023696682463
+elemento: - --> frecuencia: 6 --> probabilidad: 0.0014218009478672985
+elemento: ¿ --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: : --> frecuencia: 5 --> probabilidad: 0.001184834123222749
+elemento: k --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: B --> frecuencia: 3 --> probabilidad: 0.0007109004739336493
+elemento: ; --> frecuencia: 6 --> probabilidad: 0.0014218009478672985
+elemento: I --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: é --> frecuencia: 28 --> probabilidad: 0.006635071090047393
+elemento: A --> frecuencia: 6 --> probabilidad: 0.0014218009478672985
+elemento: g --> frecuencia: 55 --> probabilidad: 0.013033175355450236
+elemento: ú --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: p --> frecuencia: 102 --> probabilidad: 0.024170616113744076
+elemento: e --> frecuencia: 521 --> probabilidad: 0.12345971563981042
+elemento: x --> frecuencia: 4 --> probabilidad: 0.0009478672985781991
+elemento: u --> frecuencia: 203 --> probabilidad: 0.0481042654028436
+elemento: . --> frecuencia: 33 --> probabilidad: 0.007819905213270141
+elemento: c --> frecuencia: 152 --> probabilidad: 0.03601895734597156
+elemento: ó --> frecuencia: 30 --> probabilidad: 0.0071090047393364926
+elemento: L --> frecuencia: 2 --> probabilidad: 0.00047393364928909954
+elemento: f --> frecuencia: 26 --> probabilidad: 0.006161137440758294
+elemento: o --> frecuencia: 322 --> probabilidad: 0.07630331753554502
+elemento: ñ --> frecuencia: 11 --> probabilidad: 0.0026066350710900474
+elemento: í --> frecuencia: 19 --> probabilidad: 0.004502369668246445
+elemento: ! --> frecuencia: 1 --> probabilidad: 0.00023696682464454977
+elemento: a --> frecuencia: 529 --> probabilidad: 0.12535545023696681
+elemento: Y --> frecuencia: 6 --> probabilidad: 0.0014218009478672985
+elemento: n --> frecuencia: 293 --> probabilidad: 0.06943127962085308
 Las frecuencias para el texto en ingles son:
 
 
-elemento: ' --> frecuencia: 2
-elemento: r --> frecuencia: 189
-elemento: D --> frecuencia: 2
-elemento: T --> frecuencia: 9
-elemento: v --> frecuencia: 26
-elemento: Y --> frecuencia: 3
-elemento: w --> frecuencia: 99
-elemento: y --> frecuencia: 81
-elemento: d --> frecuencia: 179
-elemento: c --> frecuencia: 82
-elemento: I --> frecuencia: 22
-elemento: g --> frecuencia: 96
-elemento: p --> frecuencia: 64
-elemento: i --> frecuencia: 229
-elemento: q --> frecuencia: 2
-elemento: S --> frecuencia: 3
-elemento: f --> frecuencia: 79
-elemento: M --> frecuencia: 1
-elemento: b --> frecuencia: 33
-elemento: C --> frecuencia: 5
-elemento: , --> frecuencia: 75
-elemento: E --> frecuencia: 3
-elemento: W --> frecuencia: 7
-elemento: - --> frecuencia: 1
-elemento: L --> frecuencia: 2
-elemento: s --> frecuencia: 221
-elemento: t --> frecuencia: 303
-elemento: a --> frecuencia: 326
-elemento: P --> frecuencia: 1
-elemento: x --> frecuencia: 2
-elemento: ? --> frecuencia: 3
-elemento: e --> frecuencia: 424
-elemento: h --> frecuencia: 224
-elemento: A --> frecuencia: 13
-elemento: J --> frecuencia: 1
-elemento: H --> frecuencia: 7
-elemento: G --> frecuencia: 2
-elemento: l --> frecuencia: 178
-elemento: m --> frecuencia: 102
-elemento: o --> frecuencia: 320
-elemento: ! --> frecuencia: 4
-elemento: B --> frecuencia: 1
-elemento: n --> frecuencia: 261
-elemento: F --> frecuencia: 2
-elemento: N --> frecuencia: 1
-elemento: k --> frecuencia: 32
-elemento: j --> frecuencia: 2
-elemento: . --> frecuencia: 39
-elemento: " --> frecuencia: 12
-elemento: u --> frecuencia: 105
-La fuente discreta castellano.txt tiene una entropia: 4.410238843123111 [bits/simbolo]
+elemento: h --> frecuencia: 224 --> probabilidad: 0.0577319587628866
+elemento: ' --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: v --> frecuencia: 26 --> probabilidad: 0.006701030927835051
+elemento: P --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+elemento: S --> frecuencia: 3 --> probabilidad: 0.0007731958762886598
+elemento: d --> frecuencia: 179 --> probabilidad: 0.046134020618556704
+elemento: M --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+elemento: m --> frecuencia: 102 --> probabilidad: 0.026288659793814433
+elemento: c --> frecuencia: 82 --> probabilidad: 0.021134020618556702
+elemento: E --> frecuencia: 3 --> probabilidad: 0.0007731958762886598
+elemento: ? --> frecuencia: 3 --> probabilidad: 0.0007731958762886598
+elemento: b --> frecuencia: 33 --> probabilidad: 0.008505154639175257
+elemento: J --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+elemento: e --> frecuencia: 424 --> probabilidad: 0.10927835051546392
+elemento: I --> frecuencia: 22 --> probabilidad: 0.005670103092783505
+elemento: j --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: o --> frecuencia: 320 --> probabilidad: 0.08247422680412371
+elemento: C --> frecuencia: 5 --> probabilidad: 0.001288659793814433
+elemento: T --> frecuencia: 9 --> probabilidad: 0.0023195876288659794
+elemento: r --> frecuencia: 189 --> probabilidad: 0.04871134020618557
+elemento: A --> frecuencia: 13 --> probabilidad: 0.0033505154639175256
+elemento: w --> frecuencia: 99 --> probabilidad: 0.025515463917525773
+elemento: k --> frecuencia: 32 --> probabilidad: 0.008247422680412371
+elemento: F --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: i --> frecuencia: 229 --> probabilidad: 0.05902061855670103
+elemento: q --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: s --> frecuencia: 221 --> probabilidad: 0.05695876288659794
+elemento: ! --> frecuencia: 4 --> probabilidad: 0.0010309278350515464
+elemento: W --> frecuencia: 7 --> probabilidad: 0.0018041237113402063
+elemento: x --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: t --> frecuencia: 303 --> probabilidad: 0.07809278350515464
+elemento: n --> frecuencia: 261 --> probabilidad: 0.0672680412371134
+elemento: H --> frecuencia: 7 --> probabilidad: 0.0018041237113402063
+elemento: D --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: a --> frecuencia: 326 --> probabilidad: 0.08402061855670104
+elemento: " --> frecuencia: 12 --> probabilidad: 0.003092783505154639
+elemento: - --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+elemento: , --> frecuencia: 75 --> probabilidad: 0.019329896907216496
+elemento: u --> frecuencia: 105 --> probabilidad: 0.027061855670103094
+elemento: f --> frecuencia: 79 --> probabilidad: 0.020360824742268042
+elemento: N --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+elemento: g --> frecuencia: 96 --> probabilidad: 0.024742268041237112
+elemento: l --> frecuencia: 178 --> probabilidad: 0.04587628865979381
+elemento: y --> frecuencia: 81 --> probabilidad: 0.020876288659793813
+elemento: L --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: Y --> frecuencia: 3 --> probabilidad: 0.0007731958762886598
+elemento: p --> frecuencia: 64 --> probabilidad: 0.016494845360824743
+elemento: G --> frecuencia: 2 --> probabilidad: 0.0005154639175257732
+elemento: . --> frecuencia: 39 --> probabilidad: 0.010051546391752578
+elemento: B --> frecuencia: 1 --> probabilidad: 0.0002577319587628866
+La fuente discreta castellano.txt tiene una entropia: 4.410238843123112 [bits/simbolo]
 La fuente discreta ingles.txt tiene una entropia: 4.430201945105413 [bits/simbolo]
 \end{verbatim}
 
-\newpage
+Vemos que el texto en castellano tiene mejor eficiencia, esto se debe a que el algoritmo que 
+implementa el formato ZIP es de diccionario dinamico y dada la estructura repetitiva que tienen
+los textos en castellano(por ejemplo el texto tiene muchos \textit{que}) hace que su compresion sea mayor.
 
 
 \section{Problema 4}
@@ -636,21 +544,21 @@ A continuación su salida gráfica:
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/seniales_4_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/seniales_4_bits.eps}
    \caption{Cuantización 4 bits}\label{fig:q:4}     
 \end{figure}
 
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/seniales_3_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/seniales_3_bits.eps}
    \caption{Cuantización 3 bits}\label{fig:q:3}     
 \end{figure}
 
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/seniales_2_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/seniales_2_bits.eps}
    \caption{Cuantización 2 bits}\label{fig:q:2}     
 \end{figure}
 
@@ -675,21 +583,21 @@ y además comparamos gráficamente todas las seniales. A continuación las salid
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_4_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_4_bits.eps}
    \caption{Cuantización 4 bits}\label{fig:qv:4}     
 \end{figure}
 
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_3_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_3_bits.eps}
    \caption{Cuantización 3 bits}\label{fig:qv:3}     
 \end{figure}
 
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.78\textwidth]{./Images/senialesv_voz_2_bits.eps}
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_2_bits.eps}
    \caption{Cuantización 2 bits}\label{fig:qv:2}     
 \end{figure}
 La relación senial-ruido para una senial cuantizada uniformemente se puede expresar:
@@ -711,8 +619,8 @@ para 4 bits\\
 
 A la salida del script obtemos:
 \begin{verbatim}
-elsuizo@debian:~/Telecomunicaciones/Laboratorios/Lab1/Programas/Julia$ ~/julia/./julia problema5.jl 
-INFO: Loading help data...
+julia> include("problema5.jl")
+WARNING: replacing module Teleco2
 La relación senial-ruido para 2 bits es: 4.7383394267141[Db]
 La relación senial-ruido para 3 bits es: 9.682605271481124[Db]
 La relación senial-ruido para 4 bits es: 20.744776704544634[Db]
@@ -748,13 +656,150 @@ Conclusiones:
 \end{itemize}
 \subsection{resolución}
 
-%-------------------------------------------------------------------------
-% Bibliografia
-%-------------------------------------------------------------------------
+Nuevamente se realizó un script(\verb|problema6.jl|) que realiza la lectura-escritura de los archivos \verb|wav|
+y además comparamos gráficamente todas las seniales. A continuación las salidas del mencionado script.
 
-\begin{thebibliography}{6}
- \bibitem{Principal}{Digital communications, fundamentals and applications. Bernard Sklar}\\
- \bibitem{Principal2}{Julia: A fresh approach to numerical computing. Jeff Bezanson, Alan Edelman, Stefan Karpinski, Viral B. Shah(2014)}\url{http://arxiv.org/abs/1411.1607}
-\end{thebibliography}
+\begin{verbatim}
+julia> include("problema6.jl")
+La relación senial-ruido para 2 bits es: 4.994832156111841 [Db]
+La relación senial-ruido para 3 bits es: 9.01438241013517 [Db]
+La relación senial-ruido para 4 bits es: 26.059268713048507 [Db]
+\end{verbatim}
+
+\begin{figure}[H] 
+\centering
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_2_bits_mu.eps}
+   \caption{cuantización 2 bits con la ley-$\mu$}\label{fig:qv_mu:2}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_2_bits_mu.eps}
+   \caption{cuantización 3 bits con la ley-$\mu$}\label{fig:qv_mu:3}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/senialesv_voz_3_bits_mu.eps}
+   \caption{cuantización 4 bits con la ley-$\mu$}\label{fig:qv_mu:4}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/densidad_espectral_x.eps}
+   \caption{densidad espectral energia original}\label{fig:densidad}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/densidad_espectral_x_2.eps}
+   \caption{densidad espectral energia 2 bits}\label{fig:densidad_x_2}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/densidad_espectral_x_3.eps}
+   \caption{densidad espectral energia 3 bits}\label{fig:densidad_x_3}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/densidad_espectral_x_4.eps}
+   \caption{densidad espectral energia 4 bits}\label{fig:densidad_x_4}     
+\end{figure}
+
+Vemos que se mejora la relacion senial-ruido como esperabamos ya que se trata de 
+una senial de voz y la ley de compresion $\mu$ esta pensada para estas seniales.
+
+\section{Problema 7}
+
+Dada los siguientes pares de señales, añada ruido y pruebe el comportamiento
+del filtro adaptado para la deteccion de las mismas.
+\begin{displaymath}
+   S_{1a}(t) = \left\{
+     \begin{array}{lr}
+        A & : 0 < \, t \, < \frac{T}{2} \\
+        0 & : \frac{T}{2} < \, t < \,T \\
+     \end{array}
+   \right.
+\end{displaymath} 
+\begin{displaymath}
+   S_{1b}(t) = \left\{
+     \begin{array}{lr}
+        0 & : 0 < \, T \, < \frac{T}{4} \\
+        A & : \frac{T}{4} < \, t < \,\frac{3T}{4} \\
+        0 & : \frac{3T}{4} < \, t < \,T
+     \end{array}
+   \right.
+\end{displaymath} 
+\begin{displaymath}
+   S_{2a}(t) = \left\{
+     \begin{array}{lr}
+        A & : 0 < \, t \, < \frac{T}{2} \\
+        0 & : \frac{T}{2} < \, t < \,T \\
+     \end{array}
+   \right.
+\end{displaymath} 
+\begin{displaymath}
+   S_{2b}(t) = \left\{
+     \begin{array}{lr}
+        0 & : 0 < \, t \, < \frac{T}{2} \\
+        A & : \frac{T}{2} < \, t < \,T \\
+     \end{array}
+   \right.
+\end{displaymath} 
+\begin{displaymath}
+   S_{3a}(t) = \left\{
+     \begin{array}{lr}
+        A & : 0 < \, t \, < \frac{T}{2} \\
+        0 & : \frac{T}{2} < \, T < \,T \\
+     \end{array}
+   \right.
+\end{displaymath} 
+\begin{displaymath}
+   S_{3b}(t) = \left\{
+     \begin{array}{lr}
+        -A & : 0 < \, t \, < \frac{T}{2} \\
+        0 & : \frac{T}{2} < \, t < \,T \\
+     \end{array}
+   \right.
+\end{displaymath} 
+
+\subsection{resolucion}
+Nuevamente se realizó un script(\verb|problema7.jl|) que realiza 
+y además comparamos gráficamente todas las seniales. A continuación las salidas del mencionado script.
+
+\begin{figure}[H] 
+\centering
+   \includegraphics[width=0.48\textwidth]{./Images/filtro_adaptado1.eps}
+   \caption{salidas del filtro adaptado para el conjuinto 1}\label{fig:filtro_1}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/filtro_adaptado2.eps}
+   \caption{salidas del filtro adaptado para el conjuinto 2}\label{fig:filtro_2}     
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.48\textwidth]{./Images/filtro_adaptado3.eps}
+   \caption{salidas del filtro adaptado para el conjuinto 3}\label{fig:filtro_3}     
+\end{figure}
+
+
+Vemos que el conjunto 3 que es una senial bipolar se comporta mejor, como esperabamos 
+ya que se puede transmitir con 3[db] menos de potencia a igual tasa de error de bit o 
+probabilidad de error de bit.
+
+\newpage 
+
+
+
+%------------------------------------------------------------------------- 
+% Bibliografia 
+%-------------------------------------------------------------------------
+\begin{thebibliography}{6} \bibitem{Principal}{Digital communications, fundamentals and applications. Bernard Sklar}\\ \bibitem{Principal2}{Julia: A fresh approach to numerical computing. Jeff Bezanson, Alan Edelman, Stefan Karpinski, Viral B. Shah(2014)}\url{http://arxiv.org/abs/1411.1607} 
+\end{thebibliography} 
 
 \end{document}
